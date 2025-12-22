@@ -31,4 +31,10 @@ public class PlanServiceImpl implements PlanService {
         return PlanConverter.convertToDTO(plans);
     }
 
+    @Override
+    public void createPlan(PlanDTO planInfo) {
+        Plan plan = PlanConverter.convertToEntity(planInfo);
+        planRepository.save(plan);
+    }
+
 }

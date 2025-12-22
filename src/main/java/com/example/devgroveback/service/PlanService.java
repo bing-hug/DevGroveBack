@@ -8,4 +8,10 @@ public interface PlanService {
     PlanDTO getPlanByID(long id);
 
     List<PlanDTO> getAllPlans();
+
+    default void createPlan(PlanDTO planInfo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'createPlan'");
+    }
+
 }

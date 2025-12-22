@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class PlanDTO {
-    private long id;
+    private Long id;
     private String title;
     private String description;
     private Date startDate;

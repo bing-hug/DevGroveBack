@@ -2,12 +2,15 @@ package com.example.devgroveback.controller;
 
 import com.example.devgroveback.Response;
 import com.example.devgroveback.dto.PlanDTO;
+import com.example.devgroveback.dto.PlanStatusRequest;
+import com.example.devgroveback.dto.PlanRemarkRequest;
 import com.example.devgroveback.service.PlanService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import lombok.extern.slf4j.Slf4j;
 import tools.jackson.databind.ObjectMapper;
 
@@ -31,6 +34,30 @@ public class PlanController {
     @GetMapping("/plans")
     public Response<List<PlanDTO>> getAllPlans() {
         List<PlanDTO> plans = planService.getAllPlans();
+        return Response.newSuccess(plans);
+    }
+
+    @GetMapping("/plans/byStartDate")
+    public Response<List<PlanDTO>> getPlansByStartDate(@RequestParam("start_date") String startDateStr) {
+        java.time.LocalDateTime startDate;
+        try {
+            // 先尝试完整时间
+            startDate = java.time.LocalDateTime.parse(startDateStr);
+        } catch (java.time.format.DateTimeParseException e1) {
+            try {
+                // 尝试 ISO 带Z格式
+                startDate = java.time.OffsetDateTime.parse(startDateStr).toLocalDateTime();
+            } catch (java.time.format.DateTimeParseException e2) {
+                try {
+                    // 尝试仅日期
+                    startDate = java.time.LocalDate.parse(startDateStr).atStartOfDay();
+                } catch (java.time.format.DateTimeParseException e3) {
+                    log.error("start_date参数无法解析: {}", startDateStr);
+                    throw e3;
+                }
+            }
+        }
+        List<PlanDTO> plans = planService.getPlansByStartDate(startDate);
         return Response.newSuccess(plans);
     }
 
@@ -62,4 +89,31 @@ public class PlanController {
         }
     }
 
+    @PostMapping("/setPlanStatus")
+    public Response<Boolean> setCompleteStatus(@RequestBody PlanStatusRequest request) {
+        if (request == null) {
+            log.error("setPlanStatus: Controller未接收到前端数据，可能是JSON格式或字段名错误");
+            return Response.newSuccess(false);
+        }
+        log.info("setPlanStatus: 前端发来的数据: id={}, isCompleted={}", request.getId(), request.getIsCompleted());
+        Boolean result = planService.changeCompleteStatus(request.getId(), request.getIsCompleted());
+        return Response.newSuccess(result);
+    }
+
+    @PostMapping("/delPlan")
+    public Response<String> delPlan(@RequestParam long id) {
+        planService.deletePlan(id);
+        return Response.newSuccess("删除成功");
+    }
+
+    @PostMapping("/setPlanRemark")
+    public Response<String> setRemark(@RequestBody PlanRemarkRequest request) {
+        log.info("setPlanRemark: 前端发来的数据: id={}, remark={}", request, request.getId(), request.getRemark());
+        Boolean result = planService.changeRemark(request.getId(), request.getRemark());
+        if (result) {
+            return Response.newSuccess("备注更新成功");
+        } else {
+            return Response.newSuccess("备注更新失败，计划不存在");
+        }
+    }
 }

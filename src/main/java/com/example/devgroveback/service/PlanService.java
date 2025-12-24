@@ -9,9 +9,17 @@ public interface PlanService {
 
     List<PlanDTO> getAllPlans();
 
+    List<PlanDTO> getPlansByStartDate(java.time.LocalDateTime startDate);
+
     default void createPlan(PlanDTO planInfo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createPlan'");
     }
+
+    Boolean changeCompleteStatus(Long id, Boolean isCompleted);
+
+    Boolean changeRemark(Long id, String remark);
+
+    void deletePlan(Long id);
 
 }

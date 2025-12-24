@@ -11,7 +11,7 @@ import com.example.devgroveback.converter.PriorityConverter;
 // 自增
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "plans")
@@ -29,10 +29,24 @@ public class Plan {
 
     private String description;
 
-    private Date startDate;
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
 
     @Convert(converter = PriorityConverter.class)
     private Priority priority;
 
     private String remark;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "is_completed")
+    private Boolean isCompleted;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
 }

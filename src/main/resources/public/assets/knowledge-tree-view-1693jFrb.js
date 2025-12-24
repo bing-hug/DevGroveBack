@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-BCo6x5W8.js";import{l as r,y as t}from"./index-35acWUSG.js";const n=e({},[["render",function(e,n){return t(),r("div",null,"这是tree")}]]);export{n as default};

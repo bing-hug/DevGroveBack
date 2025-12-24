@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-BCo6x5W8.js";import{l as r,y as n}from"./index-35acWUSG.js";const t=e({},[["render",function(e,t){return n(),r("div",null,"这是interview")}]]);export{t as default};

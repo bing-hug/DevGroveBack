@@ -37,4 +37,41 @@ public class PlanServiceImpl implements PlanService {
         planRepository.save(plan);
     }
 
+    @Override
+    @Transactional
+    public Boolean changeCompleteStatus(Long id, Boolean isCompleted) {
+        Optional<Plan> optionalPlan = planRepository.findById(id);
+        if (optionalPlan.isPresent()) {
+            Plan plan = optionalPlan.get();
+            plan.setIsCompleted(isCompleted);
+            planRepository.save(plan);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public void deletePlan(Long id) {
+        planRepository.deleteById(id);
+    }
+
+    @Override
+    public List<PlanDTO> getPlansByStartDate(java.time.LocalDateTime startDate) {
+        List<Plan> plans = planRepository.findByStartDateBetween(startDate, startDate.plusDays(1));
+        return PlanConverter.convertToDTO(plans);
+    }
+
+    @Override
+    @Transactional
+    public Boolean changeRemark(Long id, String remark) {
+        Optional<Plan> optionalPlan = planRepository.findById(id);
+        if (optionalPlan.isPresent()) {
+            Plan plan = optionalPlan.get();
+            plan.setRemark(remark);
+            planRepository.save(plan);
+            return true;
+        }
+        return false;
+    }
 }

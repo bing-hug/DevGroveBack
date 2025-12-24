@@ -1,9 +1,10 @@
 package com.example.devgroveback.dto;
 
 import com.example.devgroveback.enums.Priority;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +14,12 @@ public class PlanDTO {
     private Long id;
     private String title;
     private String description;
-    private Date startDate;
+    @JsonProperty("start_date")
+    private LocalDateTime startDate;
     private Priority priority;
     private String remark;
+    @JsonProperty("created_at")
+    private LocalDateTime createdAt;
+    @JsonProperty("is_completed")
+    private Boolean isCompleted;
 }

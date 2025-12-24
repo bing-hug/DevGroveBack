@@ -7,14 +7,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Repository
 public interface PlanRepository extends JpaRepository<Plan, Long>, JpaSpecificationExecutor<Plan> {
 
-    List<Plan> findByStartDate(Date startDate);
+    List<Plan> findByStartDate(LocalDateTime startDate);
 
     @Query("SELECT p FROM Plan p WHERE p.startDate < CURRENT_DATE")
     List<Plan> findExpiredActivePlans();
 
+    @Query("SELECT p FROM Plan p WHERE p.startDate >= :start AND p.startDate < :end")
+    List<Plan> findByStartDateBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }

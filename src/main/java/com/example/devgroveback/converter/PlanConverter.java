@@ -21,6 +21,9 @@ public class PlanConverter {
         dto.setDescription(plan.getDescription());
         dto.setPriority(plan.getPriority());
         dto.setStartDate(plan.getStartDate());
+        dto.setRemark(plan.getRemark());
+        dto.setCreatedAt(plan.getCreatedAt());
+        dto.setIsCompleted(plan.getIsCompleted());
 
         return dto;
     }
@@ -45,11 +48,10 @@ public class PlanConverter {
         plan.setTitle(dto.getTitle());
         plan.setDescription(dto.getDescription());
         plan.setPriority(dto.getPriority());
-        if (dto.getStartDate() != null) {
-            plan.setStartDate(new java.sql.Date(dto.getStartDate().getTime()));
-        } else {
-            plan.setStartDate(null);
-        }
+        plan.setStartDate(dto.getStartDate());
+        plan.setRemark(dto.getRemark());
+        plan.setCreatedAt(dto.getCreatedAt());
+        plan.setIsCompleted(dto.getIsCompleted());
 
         return plan;
     }

@@ -1,0 +1,1 @@
+import{_ as r}from"./_plugin-vue_export-helper-BCo6x5W8.js";import{l as e,y as n}from"./index-35acWUSG.js";const o=r({},[["render",function(r,o){return n(),e("div",null,"这是plan")}]]);export{o as default};

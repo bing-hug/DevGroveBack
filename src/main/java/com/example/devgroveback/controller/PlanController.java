@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @RestController
@@ -90,13 +92,8 @@ public class PlanController {
     }
 
     @PostMapping("/setPlanStatus")
-    public Response<Boolean> setCompleteStatus(@RequestBody PlanStatusRequest request) {
-        if (request == null) {
-            log.error("setPlanStatus: Controller未接收到前端数据，可能是JSON格式或字段名错误");
-            return Response.newSuccess(false);
-        }
-        log.info("setPlanStatus: 前端发来的数据: id={}, isCompleted={}", request.getId(), request.getIsCompleted());
-        Boolean result = planService.changeCompleteStatus(request.getId(), request.getIsCompleted());
+    public Response<Boolean> setCompleteStatus(@RequestParam Long id, @RequestParam Boolean isCompleted) {
+        Boolean result = planService.changeCompleteStatus(id, isCompleted);
         return Response.newSuccess(result);
     }
 
